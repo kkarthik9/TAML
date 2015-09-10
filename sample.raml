@@ -1,1 +1,179 @@
-Raml 8.0
+#%RAML 0.8
+title: Resource Dev
+version: v1
+baseUri: http://www.test.com/{version}
+mediaType:  application/json
+/placement:
+  displayName: dev
+  description: A collection of details of dev
+  post:
+    description: Create a dev
+    body:
+      application/json:
+        schema: |
+          {
+            "type": "object",
+            "$schema": "http://json-schema.org/draft-04/schema",
+            "placement": {
+                "requestId": {
+                    "type": "string"
+                },
+                "vCPU": {
+                    "type": "number"
+                },
+                "vMem": {
+                    "type": "number"
+                },
+                "minClockSpeed": {
+                    "type": "number"
+                },
+                "vStorage": {
+                    "type": "number"
+                },
+                "minSlotsFree": {
+                    "type": "number"
+                },
+                "flags": {
+                    "type": "string",
+                    "enum": [
+                        "SRIOV",
+                        "DPDK"
+                    ]  
+                },
+                "affinity": {
+                    "type": "string"
+                },
+                "maxCost": {
+                    "type": "number"
+                },
+                "policy": {
+                    "type": "string",
+                    "enum": [
+                        "PERF_COMPUTE",
+                        "PREF_NETWORK_UTIL",
+                        "PREF_BALANCED",
+                        "PREF_LATENCY",
+                        "PREF_COST",
+                        "PREF_MANUAL"
+                    ]
+                },
+                "datacenters": {
+                    "type": "array",
+                    "items": [
+                      {
+                        "type": "string"
+                      }
+                    ]
+                }
+            },
+            "required": [
+                "requestId",
+                "vCPU",
+                "vMem",
+                "minClockSpeed",
+                "vStorage",
+                "minSlotsFree",
+                "flags",
+                "affinity",
+                "maxCost",
+                "policy",
+                "datacenters"
+            ],
+            "additionalProperties": false
+          }        
+        example: |
+          {
+            "placement": {
+              "requestId": "REQ001",
+              "vCPU": 24,
+              "vMem": 123,
+              "minClockSpeed": 456,
+              "vStorage": 212.3,
+              "minSlotsFree": 123,
+              "flags": "SRIOV",
+              "affinity": "asds",
+              "maxCost": 154,
+              "policy": "PERF_COMPUTE",
+              "datacenters": [
+                  "asdf",
+                  "asdf",
+                  "asdf"
+              ]
+            }
+          }
+    responses:
+      200:
+        body:
+          application/json: 
+            schema: |
+              {
+                "type": "object",
+                "$schema": "http://json-schema.org/draft-04/schema",
+                "placement": {
+                  "requestId": {
+                    "type": "string"
+                  },
+                  "placements": {
+                    "type": "array",
+                    "items": [
+                      {
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "datacenter": {
+                    "type": "string"
+                  },
+                  "cost": {
+                    "type": "number"
+                  },
+                  "hostingScore": {
+                    "type": "number"
+                  },
+                  "latency": {
+                    "type": "number"
+                  },
+                  "slots": {
+                    "type": "number"
+                  },
+                  "pathUtil": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "requestId",
+                  "placements",
+                  "datacenter",
+                  "cost",
+                  "hostingScore",
+                  "latency",
+                  "slots",
+                  "pathUtil"
+                ],
+                "additionalProperties": false
+              }
+            example: |
+              {
+                  "requestId":"REQ001",
+                  "placements":["IWP"],
+                  "datacenter":"SanJo",
+                  "cost":20.0,
+                  "hostingScore":15.3,
+                  "latency":56.0,
+                  "slots":25,
+                  "pathUtil":456
+              }              
+      400 :
+        body:          
+          application/json:
+            example: |
+                 { 
+                  "message": "resource not avaliable"
+                  }  
+      500 :
+        body:
+          application/json:
+            example: |
+                { 
+                  "message": "Internal server issue"
+                }
